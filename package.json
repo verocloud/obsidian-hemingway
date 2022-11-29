@@ -12,6 +12,10 @@
 	"author": "",
 	"license": "MIT",
 	"devDependencies": {
+		"@codemirror/state": "^6.1.4",
+		"@codemirror/view": "^6.6.0",
+		"@types/deasync": "^0.1.2",
+		"@types/electron": "^1.6.10",
 		"@types/node": "^16.11.6",
 		"@typescript-eslint/eslint-plugin": "5.29.0",
 		"@typescript-eslint/parser": "5.29.0",
@@ -20,5 +24,27 @@
 		"obsidian": "latest",
 		"tslib": "2.4.0",
 		"typescript": "4.7.4"
+	},
+	"dependencies": {
+		"@codemirror/language": "^6.3.1",
+		"deasync": "^0.1.28",
+		"dictionary-en": "^3.2.0",
+		"remark-parse": "^10.0.1",
+		"retext": "^8.1.0",
+		"retext-english": "^4.1.0",
+		"retext-equality": "^6.6.0",
+		"retext-indefinite-article": "^4.1.0",
+		"retext-intensify": "^6.2.0",
+		"retext-passive": "^4.2.0",
+		"retext-profanities": "^7.2.2",
+		"retext-quotes": "^5.2.0",
+		"retext-readability": "^7.2.0",
+		"retext-repeated-words": "^4.2.0",
+		"retext-sentence-spacing": "^5.2.0",
+		"retext-spell": "^5.3.0",
+		"retext-stringify": "^3.1.0",
+		"retext-syntax-mentions": "^3.1.0",
+		"retext-syntax-urls": "^3.1.2",
+		"unified": "^10.1.2"
 	}
 }
