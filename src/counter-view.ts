@@ -23,7 +23,6 @@ export class CounterView extends ItemView {
 
   async onOpen() {
     updaterObservable.subscribe((summary) => {
-      console.log("summary", summary);
       this.update(summary);
     });
   }
