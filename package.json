@@ -45,6 +45,7 @@
 		"retext-stringify": "^3.1.0",
 		"retext-syntax-mentions": "^3.1.0",
 		"retext-syntax-urls": "^3.1.2",
+		"rxjs": "^7.5.7",
 		"unified": "^10.1.2"
 	}
 }

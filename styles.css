@@ -1,8 +1,38 @@
-/*
+.cm-rtx-intensify {
+    background-color: #246A7355;
+}
 
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
+.cm-rtx-passive {
+    background-color: #2AFC9855;
+}
 
-If your plugin does not need CSS, delete this file.
+.cm-rtx-profanities {
+    background-color: #C4A29E55;
+    color: #000;
+}
 
-*/
+.cm-rtx-readability {
+    background-color: #B68CB855;
+}
+
+.cm-rtx-repeated-words {
+    background-color: #F038FF55;
+}
+
+.cm-rtx-sentence-spacing {
+    background-color: #C6CCB255;
+}
+
+.cm-rtx-indefinite-article {
+    background-color: #F5B0CB55;
+}
+
+.cm-rtx-equality {
+    background-color: #ffcc0055;
+}
+
+
+
+.backred  {
+    background-color: red55;
+}
