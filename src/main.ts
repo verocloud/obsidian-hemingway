@@ -8,7 +8,7 @@ import {
   SettingsTab,
 } from "./settings";
 
-export default class HemingwayPlugin extends Plugin {
+export default class RetexterPlugin extends Plugin {
   settings: ObsidianReadabilitySettings;
   editorView: EditorView;
 

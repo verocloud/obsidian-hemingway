@@ -1,5 +1,5 @@
 import { App, PluginSettingTab, Setting, SettingTab } from "obsidian";
-import HemingWayPlugin from "./main";
+import RetexterPlugin from "./main";
 
 export const DEFAULT_SETTINGS = {
   intensify: {
@@ -48,9 +48,9 @@ export type ObsidianReadabilitySettings = typeof DEFAULT_SETTINGS;
 
 export class SettingsTab extends PluginSettingTab {
   app: App;
-  plugin: HemingWayPlugin;
+  plugin: RetexterPlugin;
 
-  constructor(app: App, plugin: HemingWayPlugin) {
+  constructor(app: App, plugin: RetexterPlugin) {
     super(app, plugin);
   }
 
