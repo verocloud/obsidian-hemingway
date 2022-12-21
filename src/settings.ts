@@ -61,54 +61,83 @@ export class SettingsTab extends PluginSettingTab {
 
     const colorSettings = [
       {
-        name: "Intesify colors",
-        description: "Set the background and foreground colors for intensify",
+        colorName: "Intesify colors",
+        colorDescription:
+          "Set the background and foreground colors for intensify",
+
+        toggleName: "Intensify",
+        toggleDescription: "Enable or disable the intensify filter",
         key: "intensify",
       },
       {
-        name: "Passive colors",
-        description: "Set the background and foreground colors for passive",
+        colorName: "Passive colors",
+        colorDescription:
+          "Set the background and foreground colors for passive",
+
+        toggleName: "Passive",
+        toggleDescription: "Enable or disable the passive voice filter",
         key: "passive",
       },
       {
-        name: "Profanities colors",
-        description: "Set the background and foreground colors for profanities",
+        colorName: "Profanities colors",
+        colorDescription:
+          "Set the background and foreground colors for profanities",
+
+        toggleName: "Profanities",
+        toggleDescription: "Enable or disable the profanities filter",
         key: "profanities",
       },
       {
-        name: "Readability colors",
-        description: "Set the background and foreground colors for readability",
+        colorName: "Readability colors",
+        colorDescription:
+          "Set the background and foreground colors for readability",
+
+        toggleName: "Readability",
+        toggleDescription: "Enable or disable the readability filter",
         key: "readability",
       },
       {
-        name: "Repeated words colors",
-        description:
+        colorName: "Repeated words colors",
+        colorDescription:
           "Set the background and foreground colors for repeated words",
+
+        toggleName: "Repeated words",
+        toggleDescription: "Enable or disable the repeated words filter",
         key: "repeated-words",
       },
       {
-        name: "Sentence spacing colors",
-        description:
+        colorName: "Sentence spacing colors",
+        colorDescription:
           "Set the background and foreground colors for sentence spacing",
+
+        toggleName: "Sentence spacing",
+        toggleDescription: "Enable or disable the sentence spacing filter",
         key: "sentence-spacing",
       },
       {
-        name: "Indefinite article colors",
-        description:
+        colorName: "Indefinite article colors",
+        colorDescription:
           "Set the background and foreground colors for indefinite article",
+
+        toggleName: "Indefinite article",
+        toggleDescription: "Enable or disable the indefinite article filter",
         key: "indefinite-article",
       },
       {
-        name: "Equality colors",
-        description: "Set the background and foreground colors for equality",
+        colorName: "Equality colors",
+        colorDescription:
+          "Set the background and foreground colors for equality",
+
+        toggleName: "Equality",
+        toggleDescription: "Enable or disable the equality filter",
         key: "equality",
       },
     ] as const;
 
     for (let colorSetting of colorSettings) {
       new Setting(containerEl)
-        .setName(colorSetting.name)
-        .setDesc(colorSetting.description)
+        .setName(colorSetting.colorName)
+        .setDesc(colorSetting.colorDescription)
         .addColorPicker((colorPicker) => {
           colorPicker
             .setValue(this.plugin.settings[colorSetting.key].background)
@@ -122,6 +151,18 @@ export class SettingsTab extends PluginSettingTab {
             .setValue(this.plugin.settings[colorSetting.key].foreground)
             .onChange(async (value) => {
               this.plugin.settings[colorSetting.key].foreground = value;
+              await this.plugin.saveSettings();
+            });
+        });
+
+      new Setting(containerEl)
+        .setName(colorSetting.toggleName)
+        .setDesc(colorSetting.toggleDescription)
+        .addToggle((toggle) => {
+          toggle
+            .setValue(this.plugin.settings[colorSetting.key].enabled)
+            .onChange(async (value) => {
+              this.plugin.settings[colorSetting.key].enabled = value;
               await this.plugin.saveSettings();
             });
         });

@@ -17,11 +17,12 @@ export default class RetexterPlugin extends Plugin {
 
     const view = this.app.workspace.getActiveViewOfType(MarkdownView);
 
-    this.registerEditorExtension(errorHighlightPlugin);
+    this.registerEditorExtension(errorHighlightPlugin(this.settings));
 
-    this.registerView(COUNTER_VIEW_TYPE, (leaf) => {
-      return new CounterView(leaf, this.settings);
-    });
+    this.registerView(
+      COUNTER_VIEW_TYPE,
+      (leaf) => new CounterView(leaf, this.settings)
+    );
 
     this.addSettingTab(new SettingsTab(this.app, this));
 
