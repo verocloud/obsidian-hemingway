@@ -38,9 +38,13 @@ export class SettingsTab extends PluginSettingTab {
     containerEl.empty();
 
     for (let colorSetting of PLUGINS) {
+      const lowerCaseName = colorSetting.name.toLocaleLowerCase();
+      const colorDescription = `Set the background and foreground colors for ${lowerCaseName}`;
+      const toggleDescription = `Enable or disable the ${lowerCaseName} filter`;
+
       new Setting(containerEl)
-        .setName(colorSetting.colorName)
-        .setDesc(colorSetting.colorDescription)
+        .setName(colorSetting.name)
+        .setDesc(colorDescription)
         .addColorPicker((colorPicker) => {
           colorPicker
             .setValue(this.plugin.settings[colorSetting.settingsKey].background)
@@ -59,8 +63,8 @@ export class SettingsTab extends PluginSettingTab {
         });
 
       new Setting(containerEl)
-        .setName(colorSetting.toggleName)
-        .setDesc(colorSetting.toggleDescription)
+        .setName(colorSetting.name)
+        .setDesc(toggleDescription)
         .addToggle((toggle) => {
           toggle
             .setValue(this.plugin.settings[colorSetting.settingsKey].enabled)

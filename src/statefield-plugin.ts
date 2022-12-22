@@ -8,18 +8,32 @@ import { updateSummary } from "./bridge";
 import { ObsidianReadabilitySettings } from "./settings";
 import { PLUGINS } from "./retext-plugins";
 
+/*
 type Plugins = typeof PLUGINS[number];
 type Keys = Plugins["messageSource"];
 type ExtractCssClass<T extends Keys> = T extends Plugins["messageSource"]
   ? typeof PLUGINS[number]["cssClass"]
   : never;
 
-type Classes = {
+type LegacyClasses = {
   [key in Keys]: ExtractCssClass<key>;
+};
+*/
+
+type Classes = Record<string, string>;
+type KeyToNumber<T extends Record<keyof T, keyof any>> = {
+  [P in T[keyof T]]: number;
 };
 
 const classes = PLUGINS.reduce((acc, plugin) => {
-  acc[plugin.messageSource] = plugin.cssClass;
+  const messageSource = `retext-${plugin.name
+    .toLocaleLowerCase()
+    .replace(" ", "-")}`;
+  const cssClass = `cm-rtx-${plugin.name
+    .toLocaleLowerCase()
+    .replace(" ", "-")}`;
+
+  acc[messageSource] = cssClass;
   return acc;
 }, {} as Classes);
 
@@ -36,10 +50,6 @@ const initializeProcessor = (settings: ObsidianReadabilitySettings) => {
   }
 
   return processor.use(stringify);
-};
-
-type KeyToNumber<T extends Record<keyof T, keyof any>> = {
-  [P in T[keyof T]]?: number;
 };
 
 export const errorHighlightPlugin = (settings: ObsidianReadabilitySettings) =>
