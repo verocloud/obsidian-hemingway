@@ -9,13 +9,8 @@ import readability from "retext-readability";
 
 export const PLUGINS = [
   {
-    colorName: "Intesify colors",
-    colorDescription: "Set the background and foreground colors for intensify",
-    toggleName: "Intensify",
-    toggleDescription: "Enable or disable the intensify filter",
+    name: "Intensify",
     settingsKey: "intensify",
-    messageSource: "retext-intensify",
-    cssClass: "cm-rtx-intensify",
     plugin: intensify,
     settings: false,
     defaultBackgroundColor: "#246A7355",
@@ -23,13 +18,8 @@ export const PLUGINS = [
     label: "Weak words",
   },
   {
-    colorName: "Passive colors",
-    colorDescription: "Set the background and foreground colors for passive",
-    toggleName: "Passive",
-    toggleDescription: "Enable or disable the passive voice filter",
+    name: "Passive voice",
     settingsKey: "passive",
-    messageSource: "retext-passive",
-    cssClass: "cm-rtx-passive",
     plugin: passive,
     settings: false,
     defaultBackgroundColor: "#2AFC9855",
@@ -37,15 +27,8 @@ export const PLUGINS = [
     label: "Passive voice",
   },
   {
-    colorName: "Profanities colors",
-    colorDescription:
-      "Set the background and foreground colors for profanities",
-
-    toggleName: "Profanities",
-    toggleDescription: "Enable or disable the profanities filter",
+    name: "Profanities",
     settingsKey: "profanities",
-    messageSource: "retext-profanities",
-    cssClass: "cm-rtx-profanities",
     plugin: profanities,
     settings: {
       sureness: 2,
@@ -55,14 +38,8 @@ export const PLUGINS = [
     label: "Bad words or profanities",
   },
   {
-    colorName: "Readability colors",
-    colorDescription:
-      "Set the background and foreground colors for readability",
-    toggleName: "Readability",
-    toggleDescription: "Enable or disable the readability filter",
+    name: "Readability",
     settingsKey: "readability",
-    messageSource: "retext-readability",
-    cssClass: "cm-rtx-readability",
     plugin: readability,
     settings: {
       age: 18,
@@ -72,15 +49,8 @@ export const PLUGINS = [
     label: "Readability",
   },
   {
-    colorName: "Repeated words colors",
-    colorDescription:
-      "Set the background and foreground colors for repeated words",
-
-    toggleName: "Repeated words",
-    toggleDescription: "Enable or disable the repeated words filter",
+    name: "Repeated words",
     settingsKey: "repeated-words",
-    messageSource: "retext-repeated-words",
-    cssClass: "cm-rtx-repeated-words",
     plugin: repeatedWords,
     settings: false,
     defaultBackgroundColor: "#F038FF55",
@@ -88,14 +58,8 @@ export const PLUGINS = [
     label: "Repeated words",
   },
   {
-    colorName: "Sentence spacing colors",
-    colorDescription:
-      "Set the background and foreground colors for sentence spacing",
-    toggleName: "Sentence spacing",
-    toggleDescription: "Enable or disable the sentence spacing filter",
+    name: "Sentence spacing",
     settingsKey: "sentence-spacing",
-    messageSource: "retext-sentence-spacing",
-    cssClass: "cm-rtx-sentence-spacing",
     plugin: sentenceSpacing,
     settings: false,
     defaultBackgroundColor: "#C6CCB255",
@@ -103,14 +67,8 @@ export const PLUGINS = [
     label: "Sentence spacing",
   },
   {
-    colorName: "Indefinite article colors",
-    colorDescription:
-      "Set the background and foreground colors for indefinite article",
-    toggleName: "Indefinite article",
-    toggleDescription: "Enable or disable the indefinite article filter",
+    name: "Indefinite article",
     settingsKey: "indefinite-article",
-    messageSource: "retext-indefinite-article",
-    cssClass: "cm-rtx-indefinite-article",
     plugin: indefiniteArticle,
     settings: false,
     defaultBackgroundColor: "#F5B0CB55",
@@ -118,13 +76,8 @@ export const PLUGINS = [
     label: "Indefinite article",
   },
   {
-    colorName: "Equality colors",
-    colorDescription: "Set the background and foreground colors for equality",
-    toggleName: "Equality",
-    toggleDescription: "Enable or disable the equality filter",
+    name: "Equality",
     settingsKey: "equality",
-    messageSource: "retext-equality",
-    cssClass: "cm-rtx-equality",
     plugin: equality,
     settings: false,
     defaultBackgroundColor: "#F5B0CB55",
