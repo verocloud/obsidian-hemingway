@@ -18,7 +18,7 @@ export const PLUGINS = [
     label: "Weak words",
   },
   {
-    name: "Passive",
+    name: "Passive voice",
     settingsKey: "passive",
     plugin: passive,
     settings: false,
