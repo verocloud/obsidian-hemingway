@@ -1,4 +1,5 @@
 import { Observable, Subject } from "rxjs";
+import { PLUGINS } from "./retext-plugins";
 
 export type Summary = {
   selector: string;
@@ -6,48 +7,11 @@ export type Summary = {
   count: number;
 };
 
-export const classes: Summary[] = [
-  {
-    selector: "cm-rtx-intensify",
-    label: "Weak words",
-    count: 0,
-  },
-  {
-    selector: "cm-rtx-passive",
-    label: "Passive voice",
-    count: 0,
-  },
-  {
-    selector: "cm-rtx-profanities",
-    label: "Bad words or profanities",
-    count: 0,
-  },
-  {
-    selector: "cm-rtx-readability",
-    label: "Readability",
-    count: 0,
-  },
-  {
-    selector: "cm-rtx-repeated-words",
-    label: "Repeated words",
-    count: 0,
-  },
-  {
-    selector: "cm-rtx-sentence-spacing",
-    label: "Sentence spacing",
-    count: 0,
-  },
-  {
-    selector: "cm-rtx-indefinite-article",
-    label: "Wrong indefinite article",
-    count: 0,
-  },
-  {
-    selector: "cm-rtx-equality",
-    label: "Equality",
-    count: 0,
-  },
-];
+export const classes: Summary[] = PLUGINS.map((plugin) => ({
+  selector: plugin.settingsKey,
+  label: plugin.label,
+  count: 0,
+}));
 
 export const updaterObservable = new Subject<Summary[]>();
 

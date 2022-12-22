@@ -20,6 +20,7 @@ export const PLUGINS = [
     settings: false,
     defaultBackgroundColor: "#246A7355",
     defaultForegroundColor: "#fff",
+    label: "Weak words",
   },
   {
     colorName: "Passive colors",
@@ -33,6 +34,7 @@ export const PLUGINS = [
     settings: false,
     defaultBackgroundColor: "#2AFC9855",
     defaultForegroundColor: "#000",
+    label: "Passive voice",
   },
   {
     colorName: "Profanities colors",
@@ -50,6 +52,7 @@ export const PLUGINS = [
     },
     defaultBackgroundColor: "#C4A29E55",
     defaultForegroundColor: "#000000",
+    label: "Bad words or profanities",
   },
   {
     colorName: "Readability colors",
@@ -66,6 +69,7 @@ export const PLUGINS = [
     },
     defaultBackgroundColor: "#B68CB855",
     defaultForegroundColor: "#000000",
+    label: "Readability",
   },
   {
     colorName: "Repeated words colors",
@@ -81,6 +85,7 @@ export const PLUGINS = [
     settings: false,
     defaultBackgroundColor: "#F038FF55",
     defaultForegroundColor: "#000000",
+    label: "Repeated words",
   },
   {
     colorName: "Sentence spacing colors",
@@ -95,6 +100,7 @@ export const PLUGINS = [
     settings: false,
     defaultBackgroundColor: "#C6CCB255",
     defaultForegroundColor: "#000000",
+    label: "Sentence spacing",
   },
   {
     colorName: "Indefinite article colors",
@@ -109,6 +115,7 @@ export const PLUGINS = [
     settings: false,
     defaultBackgroundColor: "#F5B0CB55",
     defaultForegroundColor: "#000000",
+    label: "Indefinite article",
   },
   {
     colorName: "Equality colors",
@@ -122,5 +129,6 @@ export const PLUGINS = [
     settings: false,
     defaultBackgroundColor: "#F5B0CB55",
     defaultForegroundColor: "#000000",
+    label: "Equality",
   },
 ] as const;
