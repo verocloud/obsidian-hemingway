@@ -3,19 +3,10 @@ import { Decoration, DecorationSet, EditorView } from "@codemirror/view";
 
 import { unified } from "unified";
 import english from "retext-english";
-import equality from "retext-equality";
-import indefiniteArticle from "retext-indefinite-article";
-import syntaxMentions from "retext-syntax-mentions";
-import sentenceSpacing from "retext-sentence-spacing";
-import repeatedWords from "retext-repeated-words";
-import quotes from "retext-quotes";
-import profanities from "retext-profanities";
-import passive from "retext-passive";
-import intensify from "retext-intensify";
-import readability from "retext-readability";
 import stringify from "retext-stringify";
-import { Summary, updateSummary } from "./bridge";
+import { updateSummary } from "./bridge";
 import { ObsidianReadabilitySettings } from "./settings";
+import { PLUGINS } from "./retext-plugins";
 
 const classes = {
   "retext-intensify": "cm-rtx-intensify",
@@ -30,23 +21,15 @@ const classes = {
 
 const initializeProcessor = (settings: ObsidianReadabilitySettings) => {
   let processor = unified().use(english);
-  if (settings.passive) processor = processor.use(passive);
 
-  if (settings.readability) processor = processor.use(readability, { age: 18 });
+  for (const plugin of PLUGINS) {
+    if (settings[plugin.settingsKey].enabled) {
+      const pluginFn = plugin.plugin as any;
 
-  if (settings.intensify) processor = processor.use(intensify);
-
-  if (settings.equality) processor = processor.use(equality);
-
-  if (settings["indefinite-article"])
-    processor = processor.use(indefiniteArticle);
-
-  if (settings["sentence-spacing"]) processor = processor.use(sentenceSpacing);
-
-  if (settings["repeated-words"]) processor = processor.use(repeatedWords);
-
-  if (settings.profanities)
-    processor = processor.use(profanities, { sureness: 2 });
+      if (plugin.settings) processor = processor.use(pluginFn, plugin.settings);
+      else processor = processor.use(pluginFn);
+    }
+  }
 
   return processor.use(stringify);
 };
