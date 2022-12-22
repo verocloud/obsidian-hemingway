@@ -32,7 +32,7 @@ export class CounterView extends ItemView {
 
     const container = this.containerEl.children[1];
     container.empty();
-    container.createEl("h1", { text: "Retex errors" });
+    container.createEl("h1", { text: "Retex findings" });
 
     const wrapper = container.createDiv("wrapper");
 
