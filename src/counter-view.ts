@@ -14,7 +14,7 @@ export class CounterView extends ItemView {
   }
 
   getDisplayText(): string {
-    return "Counter";
+    return "Hemingway Plugin";
   }
 
   getViewType(): string {
