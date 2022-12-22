@@ -3,89 +3,89 @@ import { Decoration, DecorationSet, EditorView } from "@codemirror/view";
 
 import { unified } from "unified";
 import english from "retext-english";
-import equality from "retext-equality";
-import indefiniteArticle from "retext-indefinite-article";
-import syntaxMentions from "retext-syntax-mentions";
-import sentenceSpacing from "retext-sentence-spacing";
-import repeatedWords from "retext-repeated-words";
-import quotes from "retext-quotes";
-import profanities from "retext-profanities";
-import passive from "retext-passive";
-import intensify from "retext-intensify";
-import readability from "retext-readability";
 import stringify from "retext-stringify";
-import { Summary, updateSummary } from "./bridge";
+import { updateSummary } from "./bridge";
+import { ObsidianReadabilitySettings } from "./settings";
+import { PLUGINS } from "./retext-plugins";
 
-const classes = {
-  "retext-intensify": "cm-rtx-intensify",
-  "retext-passive": "cm-rtx-passive",
-  "retext-profanities": "cm-rtx-profanities",
-  "retext-readability": "cm-rtx-readability",
-  "retext-repeated-words": "cm-rtx-repeated-words",
-  "retext-sentence-spacing": "cm-rtx-sentence-spacing",
-  "retext-indefinite-article": "cm-rtx-indefinite-article",
-  "retext-equality": "cm-rtx-equality",
+type Plugins = typeof PLUGINS[number];
+type Keys = Plugins["messageSource"];
+type ExtractCssClass<T extends Keys> = T extends Plugins["messageSource"]
+  ? typeof PLUGINS[number]["cssClass"]
+  : never;
+
+type Classes = {
+  [key in Keys]: ExtractCssClass<key>;
 };
 
-const initializeProcessor = () =>
-  unified()
-    .use(english)
-    .use(passive)
-    .use(readability, { age: 14 })
-    .use(intensify)
-    .use(equality)
-    .use(indefiniteArticle)
-    .use(syntaxMentions)
-    .use(sentenceSpacing)
-    .use(repeatedWords)
-    .use(profanities, { sureness: 2 })
-    .use(stringify);
+const classes = PLUGINS.reduce((acc, plugin) => {
+  acc[plugin.messageSource] = plugin.cssClass;
+  return acc;
+}, {} as Classes);
 
-let oldHightlights: DecorationSet | undefined = undefined;
-export const errorHighlightPlugin = StateField.define<DecorationSet>({
-  create: (_) => Decoration.none,
-  update: function (highlights, tr) {
-    if (oldHightlights) {
-      highlights = oldHightlights;
-      oldHightlights = undefined;
+const initializeProcessor = (settings: ObsidianReadabilitySettings) => {
+  let processor = unified().use(english);
+
+  for (const plugin of PLUGINS) {
+    if (settings[plugin.settingsKey].enabled) {
+      const pluginFn = plugin.plugin as any;
+
+      if (plugin.settings) processor = processor.use(pluginFn, plugin.settings);
+      else processor = processor.use(pluginFn);
+    }
+  }
+
+  return processor.use(stringify);
+};
+
+type KeyToNumber<T extends Record<keyof T, keyof any>> = {
+  [P in T[keyof T]]?: number;
+};
+
+export const errorHighlightPlugin = (settings: ObsidianReadabilitySettings) =>
+  StateField.define<DecorationSet>({
+    create: (_) => Decoration.none,
+    update: function (highlights, tr) {
+      const fullText = tr.newDoc.sliceString(0);
+      const processor = initializeProcessor(settings);
+
+      highlights = highlights.map(tr.changes);
+      const vfile = processor.processSync(fullText);
+      const summary: KeyToNumber<typeof classes> = {};
+
+      for (let message of vfile.messages) {
+        if (!message.source) continue;
+        const source = message.source as keyof typeof classes;
+        const className = classes[source];
+
+        summary[className] = (summary[className] || 0) + 1;
+
+        const begin = message.position?.start.offset || 0;
+        const end = message.position?.end.offset || 0;
+
+        let skip = false;
+        highlights.between(begin, end, (from, to, value) => {
+          skip = (value as any).class === className;
+          return false;
+        });
+
+        if (!skip)
+          highlights = highlights.update({
+            add: [
+              Decoration.mark({
+                class: classes[message.source as keyof typeof classes],
+                attributes: { title: message.reason },
+              }).range(begin, end),
+            ],
+          });
+      }
+
+      const summaryArray = Object.entries(summary).map(([key, value]) => ({
+        selector: key,
+        count: value,
+      }));
+      updateSummary(summaryArray);
       return highlights;
-    }
-
-    const fullText = tr.newDoc.sliceString(0);
-    const processor = initializeProcessor();
-
-    highlights = highlights.map(tr.changes);
-    const vfile = processor.processSync(fullText);
-    const summary: Record<string, number> = {};
-
-    for (let message of vfile.messages) {
-      if (!message.source) continue;
-
-      summary[message.source] = (summary[message.source] || 0) + 1;
-
-      const begin = message.position?.start.offset || 0;
-      const end = message.position?.end.offset || 0;
-
-      highlights.between(begin, end, (from, to, value) => {});
-
-      highlights = highlights.update({
-        add: [
-          Decoration.mark({
-            class: classes[message.source as keyof typeof classes],
-            attributes: { title: message.reason },
-          }).range(begin, end),
-        ],
-      });
-    }
-
-    oldHightlights = highlights;
-
-    const summaryArray = Object.entries(summary).map(([key, value]) => ({
-      selector: classes[key as keyof typeof classes],
-      count: value,
-    }));
-    updateSummary(summaryArray);
-    return highlights;
-  },
-  provide: (f) => EditorView.decorations.from(f),
-});
+    },
+    provide: (f) => EditorView.decorations.from(f),
+  });
