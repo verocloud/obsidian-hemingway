@@ -8,16 +8,20 @@ import { updateSummary } from "./bridge";
 import { ObsidianReadabilitySettings } from "./settings";
 import { PLUGINS } from "./retext-plugins";
 
-const classes = {
-  "retext-intensify": "cm-rtx-intensify",
-  "retext-passive": "cm-rtx-passive",
-  "retext-profanities": "cm-rtx-profanities",
-  "retext-readability": "cm-rtx-readability",
-  "retext-repeated-words": "cm-rtx-repeated-words",
-  "retext-sentence-spacing": "cm-rtx-sentence-spacing",
-  "retext-indefinite-article": "cm-rtx-indefinite-article",
-  "retext-equality": "cm-rtx-equality",
-} as const;
+type Plugins = typeof PLUGINS[number];
+type Keys = Plugins["messageSource"];
+type ExtractCssClass<T extends Keys> = T extends Plugins["messageSource"]
+  ? typeof PLUGINS[number]["cssClass"]
+  : never;
+
+type Classes = {
+  [key in Keys]: ExtractCssClass<key>;
+};
+
+const classes = PLUGINS.reduce((acc, plugin) => {
+  acc[plugin.messageSource] = plugin.cssClass;
+  return acc;
+}, {} as Classes);
 
 const initializeProcessor = (settings: ObsidianReadabilitySettings) => {
   let processor = unified().use(english);
