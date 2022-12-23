@@ -13,8 +13,8 @@ export const PLUGINS = [
     settingsKey: "intensify",
     plugin: intensify,
     settings: false,
-    defaultBackgroundColor: "#246A7355",
-    defaultForegroundColor: "#fff",
+    defaultBackgroundColor: "#dd4339",
+    defaultForegroundColor: "#002b36",
     label: "Weak words",
   },
   {
@@ -22,8 +22,8 @@ export const PLUGINS = [
     settingsKey: "passive",
     plugin: passive,
     settings: false,
-    defaultBackgroundColor: "#2AFC9855",
-    defaultForegroundColor: "#000",
+    defaultBackgroundColor: "#af354b",
+    defaultForegroundColor: "#002b36",
     label: "Passive voice",
   },
   {
@@ -33,8 +33,8 @@ export const PLUGINS = [
     settings: {
       sureness: 2,
     },
-    defaultBackgroundColor: "#C4A29E55",
-    defaultForegroundColor: "#000000",
+    defaultBackgroundColor: "#81275d",
+    defaultForegroundColor: "#002b36",
     label: "Bad words or profanities",
   },
   {
@@ -44,8 +44,8 @@ export const PLUGINS = [
     settings: {
       age: 18,
     },
-    defaultBackgroundColor: "#B68CB855",
-    defaultForegroundColor: "#000000",
+    defaultBackgroundColor: "#704d71",
+    defaultForegroundColor: "#002b36",
     label: "Readability",
   },
   {
@@ -53,8 +53,8 @@ export const PLUGINS = [
     settingsKey: "repeated-words",
     plugin: repeatedWords,
     settings: false,
-    defaultBackgroundColor: "#F038FF55",
-    defaultForegroundColor: "#000000",
+    defaultBackgroundColor: "#5e7284",
+    defaultForegroundColor: "#002b36",
     label: "Repeated words",
   },
   {
@@ -62,8 +62,8 @@ export const PLUGINS = [
     settingsKey: "sentence-spacing",
     plugin: sentenceSpacing,
     settings: false,
-    defaultBackgroundColor: "#C6CCB255",
-    defaultForegroundColor: "#000000",
+    defaultBackgroundColor: "#53825f",
+    defaultForegroundColor: "#002b36",
     label: "Sentence spacing",
   },
   {
@@ -71,8 +71,8 @@ export const PLUGINS = [
     settingsKey: "indefinite-article",
     plugin: indefiniteArticle,
     settings: false,
-    defaultBackgroundColor: "#F5B0CB55",
-    defaultForegroundColor: "#000000",
+    defaultBackgroundColor: "#49913b",
+    defaultForegroundColor: "#002b36",
     label: "Indefinite article",
   },
   {
@@ -80,8 +80,8 @@ export const PLUGINS = [
     settingsKey: "equality",
     plugin: equality,
     settings: false,
-    defaultBackgroundColor: "#F5B0CB55",
-    defaultForegroundColor: "#000000",
+    defaultBackgroundColor: "#8bad36",
+    defaultForegroundColor: "#002b36",
     label: "Equality",
   },
 ] as const;
