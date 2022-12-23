@@ -29,9 +29,7 @@ export class CounterView extends ItemView {
   update(summary?: Summary[]) {
     if (!this.containerEl) return;
 
-    console.log("antes", summary);
     if (!summary) summary = this.previousSummary;
-    console.log("despues", summary);
 
     this.previousSummary = summary;
 
