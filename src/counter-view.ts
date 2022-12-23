@@ -35,6 +35,8 @@ export class CounterView extends ItemView {
     const wrapper = container.createDiv("wrapper");
 
     for (const { count, label, selector } of summary) {
+      if (count === 0) continue;
+
       const div = wrapper.createDiv(selector);
       const span = div.createSpan();
       span.setText(`${count} - ${label}`);

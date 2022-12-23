@@ -1,19 +1,22 @@
 import { Observable, Subject } from "rxjs";
 import { PLUGINS } from "./retext-plugins";
+import { ObsidianReadabilitySettings } from "./settings";
 
 export type Summary = {
-  selector: string;
+  selector: keyof ObsidianReadabilitySettings;
+  settingsKey: string;
   label: string;
   count: number;
 };
 
-const classes: Summary[] = PLUGINS.map(({ name, label }) => {
+const classes: Summary[] = PLUGINS.map(({ name, label, settingsKey }) => {
   const cssClass = `cm-rtx-${name.toLocaleLowerCase().replace(" ", "-")}`;
 
   return {
-    selector: cssClass,
+    selector: cssClass as keyof ObsidianReadabilitySettings,
     count: 0,
     label,
+    settingsKey,
   };
 });
 

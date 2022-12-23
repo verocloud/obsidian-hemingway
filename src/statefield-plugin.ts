@@ -4,7 +4,7 @@ import { Decoration, DecorationSet, EditorView } from "@codemirror/view";
 import { unified } from "unified";
 import english from "retext-english";
 import stringify from "retext-stringify";
-import { updateSummary } from "./bridge";
+import { Summary, updateSummary } from "./bridge";
 import { ObsidianReadabilitySettings } from "./settings";
 import { PLUGINS } from "./retext-plugins";
 
@@ -20,13 +20,21 @@ type LegacyClasses = {
 };
 */
 
-type Classes = Record<string, { label: string; cssClass: string }>;
+type Classes = Record<
+  string,
+  {
+    label: string;
+    cssClass: string;
+    settingsKey: keyof ObsidianReadabilitySettings;
+  }
+>;
 
 type KeyToNumber = Record<
   string,
   {
     count: number;
     label: string;
+    settingsKey: keyof ObsidianReadabilitySettings;
   }
 >;
 
@@ -40,6 +48,7 @@ const classes = PLUGINS.reduce((acc, plugin) => {
 
   acc[messageSource] = {
     label: plugin.label,
+    settingsKey: plugin.settingsKey,
     cssClass,
   };
   return acc;
@@ -75,14 +84,18 @@ export const errorHighlightPlugin = (settings: ObsidianReadabilitySettings) =>
       for (let message of vfile.messages) {
         if (!message.source) continue;
         const source = message.source;
-        if (!classes[source]) continue;
+        if (!classes[source]) {
+          console.warn(`Unknown source: ${source}`);
+          continue;
+        }
 
-        const { cssClass: className, label } = classes[source];
+        const { cssClass: className, label, settingsKey } = classes[source];
 
         if (summary[className] === undefined) {
           summary[className] = {
             label,
             count: 1,
+            settingsKey,
           };
         } else {
           summary[className].count += 1;
@@ -108,11 +121,14 @@ export const errorHighlightPlugin = (settings: ObsidianReadabilitySettings) =>
           });
       }
 
-      const summaryArray = Object.entries(summary).map(([key, value]) => ({
-        selector: key,
-        count: value.count,
-        label: value.label,
-      }));
+      const summaryArray: Summary[] = Object.entries(summary).map(
+        ([key, value]) => ({
+          selector: key as keyof ObsidianReadabilitySettings,
+          count: value.count,
+          label: value.label,
+          settingsKey: value.settingsKey,
+        })
+      );
       updateSummary(summaryArray);
       return highlights;
     },
