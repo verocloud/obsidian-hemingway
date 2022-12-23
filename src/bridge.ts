@@ -4,7 +4,7 @@ import { ObsidianReadabilitySettings } from "./settings";
 
 export type Summary = {
   selector: keyof ObsidianReadabilitySettings;
-  settingsKey: string;
+  settingsKey: keyof ObsidianReadabilitySettings;
   label: string;
   count: number;
 };
