@@ -22,9 +22,7 @@ export class CounterView extends ItemView {
   }
 
   async onOpen() {
-    updaterObservable.subscribe((summary) => {
-      this.update(summary);
-    });
+    updaterObservable.subscribe((summary) => this.update(summary));
   }
 
   update(summary: Summary[]) {
@@ -37,11 +35,9 @@ export class CounterView extends ItemView {
     const wrapper = container.createDiv("wrapper");
 
     for (const { count, label, selector } of summary) {
-      if (count) {
-        const div = wrapper.createDiv(selector);
-        const span = div.createSpan();
-        span.setText(`${count} - ${label}`);
-      }
+      const div = wrapper.createDiv(selector);
+      const span = div.createSpan();
+      span.setText(`${count} - ${label}`);
     }
   }
 

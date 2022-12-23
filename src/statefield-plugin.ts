@@ -20,10 +20,15 @@ type LegacyClasses = {
 };
 */
 
-type Classes = Record<string, string>;
-type KeyToNumber<T extends Record<keyof T, keyof any>> = {
-  [P in T[keyof T]]: number;
-};
+type Classes = Record<string, { label: string; cssClass: string }>;
+
+type KeyToNumber = Record<
+  string,
+  {
+    count: number;
+    label: string;
+  }
+>;
 
 const classes = PLUGINS.reduce((acc, plugin) => {
   const messageSource = `retext-${plugin.name
@@ -33,7 +38,10 @@ const classes = PLUGINS.reduce((acc, plugin) => {
     .toLocaleLowerCase()
     .replace(" ", "-")}`;
 
-  acc[messageSource] = cssClass;
+  acc[messageSource] = {
+    label: plugin.label,
+    cssClass,
+  };
   return acc;
 }, {} as Classes);
 
@@ -56,19 +64,29 @@ export const errorHighlightPlugin = (settings: ObsidianReadabilitySettings) =>
   StateField.define<DecorationSet>({
     create: (_) => Decoration.none,
     update: function (highlights, tr) {
+      highlights = Decoration.none;
+
       const fullText = tr.newDoc.sliceString(0);
       const processor = initializeProcessor(settings);
 
-      highlights = highlights.map(tr.changes);
       const vfile = processor.processSync(fullText);
-      const summary: KeyToNumber<typeof classes> = {};
+      const summary: KeyToNumber = {};
 
       for (let message of vfile.messages) {
         if (!message.source) continue;
-        const source = message.source as keyof typeof classes;
-        const className = classes[source];
+        const source = message.source;
+        if (!classes[source]) continue;
 
-        summary[className] = (summary[className] || 0) + 1;
+        const { cssClass: className, label } = classes[source];
+
+        if (summary[className] === undefined) {
+          summary[className] = {
+            label,
+            count: 1,
+          };
+        } else {
+          summary[className].count += 1;
+        }
 
         const begin = message.position?.start.offset || 0;
         const end = message.position?.end.offset || 0;
@@ -83,7 +101,7 @@ export const errorHighlightPlugin = (settings: ObsidianReadabilitySettings) =>
           highlights = highlights.update({
             add: [
               Decoration.mark({
-                class: classes[message.source as keyof typeof classes],
+                class: classes[message.source].cssClass,
                 attributes: { title: message.reason },
               }).range(begin, end),
             ],
@@ -92,7 +110,8 @@ export const errorHighlightPlugin = (settings: ObsidianReadabilitySettings) =>
 
       const summaryArray = Object.entries(summary).map(([key, value]) => ({
         selector: key,
-        count: value,
+        count: value.count,
+        label: value.label,
       }));
       updateSummary(summaryArray);
       return highlights;

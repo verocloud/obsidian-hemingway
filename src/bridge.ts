@@ -3,27 +3,34 @@ import { PLUGINS } from "./retext-plugins";
 
 export type Summary = {
   selector: string;
-  label?: string;
+  label: string;
   count: number;
 };
 
-export const classes: Summary[] = PLUGINS.map((plugin) => ({
-  selector: plugin.settingsKey,
-  label: plugin.label,
-  count: 0,
-}));
+const classes: Summary[] = PLUGINS.map(({ name, label }) => {
+  const cssClass = `cm-rtx-${name.toLocaleLowerCase().replace(" ", "-")}`;
+
+  return {
+    selector: cssClass,
+    count: 0,
+    label,
+  };
+});
 
 export const updaterObservable = new Subject<Summary[]>();
 
 export const updateSummary = (summary: Summary[]) => {
-  for (let summaryItem of summary) {
-    const classItem = classes.find(
-      (item) => item.selector === summaryItem.selector
+  const fullSummary = classes.map((item) => {
+    const summaryItem = summary.find(
+      (summaryItem) => summaryItem.selector === item.selector
     );
-    if (classItem) {
-      classItem.count = summaryItem.count;
-    }
-  }
 
-  updaterObservable.next(classes);
+    if (summaryItem) {
+      return summaryItem;
+    } else {
+      return item;
+    }
+  });
+
+  updaterObservable.next(fullSummary);
 };
