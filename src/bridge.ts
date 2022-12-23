@@ -1,4 +1,4 @@
-import { Observable, Subject } from "rxjs";
+import { Subject } from "rxjs";
 import { PLUGINS } from "./retext-plugins";
 import { ObsidianReadabilitySettings } from "./settings";
 
@@ -20,7 +20,7 @@ const classes: Summary[] = PLUGINS.map(({ name, label, settingsKey }) => {
   };
 });
 
-export const updaterObservable = new Subject<Summary[]>();
+export const updaterObservable = new Subject<Summary[] | undefined>();
 
 export const updateSummary = (summary: Summary[]) => {
   const fullSummary = classes.map((item) => {

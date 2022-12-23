@@ -7,6 +7,7 @@ export const COUNTER_VIEW_TYPE = "counter";
 
 export class CounterView extends ItemView {
   settings: ObsidianReadabilitySettings;
+  previousSummary: Summary[] = [];
 
   constructor(leaf: WorkspaceLeaf, settings: ObsidianReadabilitySettings) {
     super(leaf);
@@ -25,8 +26,14 @@ export class CounterView extends ItemView {
     updaterObservable.subscribe((summary) => this.update(summary));
   }
 
-  update(summary: Summary[]) {
+  update(summary?: Summary[]) {
     if (!this.containerEl) return;
+
+    console.log("antes", summary);
+    if (!summary) summary = this.previousSummary;
+    console.log("despues", summary);
+
+    this.previousSummary = summary;
 
     const container = this.containerEl.children[1];
     container.empty();
