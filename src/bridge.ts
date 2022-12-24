@@ -9,6 +9,11 @@ export type Summary = {
   count: number;
 };
 
+export type Updater = {
+  summary: Summary[];
+  docContent: string;
+};
+
 const classes: Summary[] = PLUGINS.map(({ name, label, settingsKey }) => {
   const cssClass = `cm-rtx-${name.toLocaleLowerCase().replace(" ", "-")}`;
 
@@ -20,9 +25,9 @@ const classes: Summary[] = PLUGINS.map(({ name, label, settingsKey }) => {
   };
 });
 
-export const updaterObservable = new Subject<Summary[] | undefined>();
+export const updaterObservable = new Subject<Updater | undefined>();
 
-export const updateSummary = (summary: Summary[]) => {
+export const updateSummary = (summary: Summary[], docContent: string) => {
   const fullSummary = classes.map((item) => {
     const summaryItem = summary.find(
       (summaryItem) => summaryItem.selector === item.selector
@@ -35,5 +40,8 @@ export const updateSummary = (summary: Summary[]) => {
     }
   });
 
-  updaterObservable.next(fullSummary);
+  updaterObservable.next({
+    summary: fullSummary,
+    docContent,
+  });
 };

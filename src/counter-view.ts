@@ -1,13 +1,15 @@
 import { ItemView, WorkspaceLeaf } from "obsidian";
 
-import { Summary, updaterObservable } from "./bridge";
+import { Updater, updaterObservable } from "./bridge";
 import { ObsidianReadabilitySettings } from "./settings";
 
 export const COUNTER_VIEW_TYPE = "counter";
 
+import { calculateIndexes } from "./grade-level-algs";
+
 export class CounterView extends ItemView {
   settings: ObsidianReadabilitySettings;
-  previousSummary: Summary[] = [];
+  previousUpdate: Updater;
 
   constructor(leaf: WorkspaceLeaf, settings: ObsidianReadabilitySettings) {
     super(leaf);
@@ -26,12 +28,13 @@ export class CounterView extends ItemView {
     updaterObservable.subscribe((summary) => this.update(summary));
   }
 
-  update(summary?: Summary[]) {
+  update(update?: Updater) {
     if (!this.containerEl) return;
 
-    if (!summary) summary = this.previousSummary;
+    if (!update) update = this.previousUpdate;
+    const { docContent, summary } = update;
 
-    this.previousSummary = summary;
+    this.previousUpdate = update;
 
     const container = this.containerEl.children[1];
     container.empty();
@@ -55,6 +58,23 @@ export class CounterView extends ItemView {
         background-color: ${backgroundColor};
         color: ${color};
       }\n`;
+    }
+
+    const table = wrapper.createEl("table");
+    table.addClass("cm-rtx-summary__table");
+
+    const tr = table.createEl("tr");
+
+    tr.createEl("th", { text: "Algorithm" });
+    tr.createEl("th", { text: "Level" });
+    tr.createEl("th", { text: "Who can read?" });
+
+    for (const { name, result } of calculateIndexes(docContent)) {
+      const tr = table.createEl("tr");
+
+      tr.createEl("td", { text: name });
+      tr.createEl("td", { text: `${result.value.toFixed(2)}` });
+      tr.createEl("td", { text: result.label });
     }
 
     container.createEl("style", {

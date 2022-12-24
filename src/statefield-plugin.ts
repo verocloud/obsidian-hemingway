@@ -128,7 +128,7 @@ export const errorHighlightPlugin = (settings: ObsidianReadabilitySettings) =>
           settingsKey: value.settingsKey,
         })
       );
-      updateSummary(summaryArray);
+      updateSummary(summaryArray, tr.newDoc.sliceString(0));
       return highlights;
     },
     provide: (f) => EditorView.decorations.from(f),

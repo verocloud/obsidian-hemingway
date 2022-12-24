@@ -31,5 +31,8 @@ export const calculateGunningFogIndex = (text: string) => {
   const indexResult =
     (averageSentenceLength + 100 * (complexWords.length / words.length)) * 0.4;
 
-  return gunningLevelToGrade(indexResult);
+  return {
+    label: gunningLevelToGrade(indexResult),
+    value: indexResult,
+  };
 };
