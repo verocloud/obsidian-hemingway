@@ -39,7 +39,7 @@ type KeyToNumber = Record<
 >;
 
 const classes = PLUGINS.reduce((acc, plugin) => {
-  const messageSource = `retext-${plugin.name
+  const messageSource = `retext-${plugin.settingsKey
     .toLocaleLowerCase()
     .replace(" ", "-")}`;
   const cssClass = `cm-rtx-${plugin.name
@@ -85,7 +85,6 @@ export const errorHighlightPlugin = (settings: ObsidianReadabilitySettings) =>
         if (!message.source) continue;
         const source = message.source;
         if (!classes[source]) {
-          console.warn(`Unknown source: ${source}`);
           continue;
         }
 

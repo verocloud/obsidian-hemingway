@@ -39,7 +39,7 @@ export class CounterView extends ItemView {
 
     let css = "";
 
-    const wrapper = container.createDiv("wrapper");
+    const wrapper = container.createDiv("cm-wrapper");
 
     for (const { count, label, selector, settingsKey } of summary) {
       if (count === 0) continue;
