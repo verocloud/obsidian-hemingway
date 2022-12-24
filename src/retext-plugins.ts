@@ -6,6 +6,7 @@ import profanities from "retext-profanities";
 import passive from "retext-passive";
 import intensify from "retext-intensify";
 import readability from "retext-readability";
+import overuse from "retext-overuse";
 
 export const PLUGINS = [
   {
@@ -83,5 +84,14 @@ export const PLUGINS = [
     defaultBackgroundColor: "#F5B0CB55",
     defaultForegroundColor: "#000000",
     label: "Equality",
+  },
+  {
+    name: "Overuse",
+    settingsKey: "overuse",
+    plugin: overuse,
+    settings: false,
+    defaultBackgroundColor: "#F5B0CB55",
+    defaultForegroundColor: "#000000",
+    label: "Overuse",
   },
 ] as const;
