@@ -8,6 +8,7 @@ import intensify from "retext-intensify";
 import readability from "retext-readability";
 import overuse from "retext-overuse";
 import simplify from "retext-simplify";
+import assuming from "retext-assuming";
 
 export const PLUGINS = [
   {
@@ -103,5 +104,14 @@ export const PLUGINS = [
     defaultBackgroundColor: "#F5B0CB55",
     defaultForegroundColor: "#000000",
     label: "Hard to read words",
+  },
+  {
+    name: "Assuming",
+    settingsKey: "assuming",
+    plugin: assuming,
+    settings: false,
+    defaultBackgroundColor: "#F5B0CB55",
+    defaultForegroundColor: "#000000",
+    label: "Possibly wrong assumptions",
   },
 ] as const;

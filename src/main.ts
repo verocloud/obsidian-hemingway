@@ -7,12 +7,15 @@ import {
   DEFAULT_SETTINGS,
   SettingsTab,
 } from "./settings";
+import { VFile } from "vfile";
 
 export default class RetexterPlugin extends Plugin {
   settings: ObsidianReadabilitySettings;
   editorView: EditorView;
 
   async onload() {
+    (VFile.prototype as any).warn = VFile.prototype.message;
+
     await this.loadSettings();
 
     const view = this.app.workspace.getActiveViewOfType(MarkdownView);
