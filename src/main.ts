@@ -15,6 +15,9 @@ export default class RetexterPlugin extends Plugin {
 
   async onload() {
     (VFile.prototype as any).warn = VFile.prototype.message;
+    (String.prototype as any).join = function (separator: string) {
+      return this;
+    };
 
     await this.loadSettings();
 

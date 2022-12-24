@@ -1,7 +1,3 @@
-type VFile = import("vfile").VFile & {
-  warn: (message: string, position: any, origin: string) => void;
-};
-
 declare module "retext-overuse" {
   type Plugin = import("unified").Plugin;
 
@@ -11,6 +7,14 @@ declare module "retext-overuse" {
 }
 
 declare module "retext-assuming" {
+  type Plugin = import("unified").Plugin;
+
+  const defaultValue: Plugin;
+
+  export default defaultValue;
+}
+
+declare module "retext-usage" {
   type Plugin = import("unified").Plugin;
 
   const defaultValue: Plugin;

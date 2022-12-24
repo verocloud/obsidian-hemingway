@@ -9,6 +9,7 @@ import readability from "retext-readability";
 import overuse from "retext-overuse";
 import simplify from "retext-simplify";
 import assuming from "retext-assuming";
+import usage from "retext-usage";
 
 export const PLUGINS = [
   {
@@ -110,8 +111,17 @@ export const PLUGINS = [
     settingsKey: "assuming",
     plugin: assuming,
     settings: false,
-    defaultBackgroundColor: "#F5B0CB55",
+    defaultBackgroundUsageColor: "#F5B0CB55",
     defaultForegroundColor: "#000000",
     label: "Possibly wrong assumptions",
+  },
+  {
+    name: "Usage",
+    settingsKey: "usage",
+    plugin: usage,
+    settings: false,
+    defaultBackgroundColor: "#F5B0CB55",
+    defaultForegroundColor: "#000000",
+    label: "Word that can be improved",
   },
 ] as const;
