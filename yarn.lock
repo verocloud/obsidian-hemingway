@@ -1608,6 +1608,19 @@ retext-sentence-spacing@^5.2.0:
     unist-util-is "^5.0.0"
     unist-util-visit "^4.0.0"
 
+retext-simplify@^7.2.0:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/retext-simplify/-/retext-simplify-7.2.0.tgz#050c8bb23e697189d904b4f7f9b8e2d33c9812e2"
+  integrity sha512-zJ4RWGZmNMulaRj6Bc/ndRFDO7k3ZZ+owVtp3DBQt029JQQnixwb3fsjc76yMfSCBOeKGgJoN7GBqBhCTgQVCg==
+  dependencies:
+    "@types/nlcst" "^1.0.0"
+    nlcst-search "^3.0.0"
+    nlcst-to-string "^3.0.0"
+    object-keys "^1.0.9"
+    quotation "^2.0.0"
+    unified "^10.0.0"
+    unist-util-position "^4.0.0"
+
 retext-spell@^5.3.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/retext-spell/-/retext-spell-5.3.0.tgz#c5b579d4d1abd4d7603f6cdc2d3f5a2d702e1133"

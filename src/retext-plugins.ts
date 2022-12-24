@@ -7,6 +7,7 @@ import passive from "retext-passive";
 import intensify from "retext-intensify";
 import readability from "retext-readability";
 import overuse from "retext-overuse";
+import simplify from "retext-simplify";
 
 export const PLUGINS = [
   {
@@ -93,5 +94,14 @@ export const PLUGINS = [
     defaultBackgroundColor: "#F5B0CB55",
     defaultForegroundColor: "#000000",
     label: "Overuse",
+  },
+  {
+    name: "Simplify",
+    settingsKey: "simplify",
+    plugin: simplify,
+    settings: false,
+    defaultBackgroundColor: "#F5B0CB55",
+    defaultForegroundColor: "#000000",
+    label: "Hard to read words",
   },
 ] as const;
