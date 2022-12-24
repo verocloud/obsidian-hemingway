@@ -4,7 +4,7 @@ import { Decoration, DecorationSet, EditorView } from "@codemirror/view";
 import { unified } from "unified";
 import english from "retext-english";
 import stringify from "retext-stringify";
-import { updateSummary } from "./bridge";
+import { Summary, updateSummary } from "./bridge";
 import { ObsidianReadabilitySettings } from "./settings";
 import { PLUGINS } from "./retext-plugins";
 
@@ -20,10 +20,23 @@ type LegacyClasses = {
 };
 */
 
-type Classes = Record<string, string>;
-type KeyToNumber<T extends Record<keyof T, keyof any>> = {
-  [P in T[keyof T]]: number;
-};
+type Classes = Record<
+  string,
+  {
+    label: string;
+    cssClass: string;
+    settingsKey: keyof ObsidianReadabilitySettings;
+  }
+>;
+
+type KeyToNumber = Record<
+  string,
+  {
+    count: number;
+    label: string;
+    settingsKey: keyof ObsidianReadabilitySettings;
+  }
+>;
 
 const classes = PLUGINS.reduce((acc, plugin) => {
   const messageSource = `retext-${plugin.name
@@ -33,7 +46,11 @@ const classes = PLUGINS.reduce((acc, plugin) => {
     .toLocaleLowerCase()
     .replace(" ", "-")}`;
 
-  acc[messageSource] = cssClass;
+  acc[messageSource] = {
+    label: plugin.label,
+    settingsKey: plugin.settingsKey,
+    cssClass,
+  };
   return acc;
 }, {} as Classes);
 
@@ -56,19 +73,33 @@ export const errorHighlightPlugin = (settings: ObsidianReadabilitySettings) =>
   StateField.define<DecorationSet>({
     create: (_) => Decoration.none,
     update: function (highlights, tr) {
+      highlights = Decoration.none;
+
       const fullText = tr.newDoc.sliceString(0);
       const processor = initializeProcessor(settings);
 
-      highlights = highlights.map(tr.changes);
       const vfile = processor.processSync(fullText);
-      const summary: KeyToNumber<typeof classes> = {};
+      const summary: KeyToNumber = {};
 
       for (let message of vfile.messages) {
         if (!message.source) continue;
-        const source = message.source as keyof typeof classes;
-        const className = classes[source];
+        const source = message.source;
+        if (!classes[source]) {
+          console.warn(`Unknown source: ${source}`);
+          continue;
+        }
 
-        summary[className] = (summary[className] || 0) + 1;
+        const { cssClass: className, label, settingsKey } = classes[source];
+
+        if (summary[className] === undefined) {
+          summary[className] = {
+            label,
+            count: 1,
+            settingsKey,
+          };
+        } else {
+          summary[className].count += 1;
+        }
 
         const begin = message.position?.start.offset || 0;
         const end = message.position?.end.offset || 0;
@@ -83,17 +114,21 @@ export const errorHighlightPlugin = (settings: ObsidianReadabilitySettings) =>
           highlights = highlights.update({
             add: [
               Decoration.mark({
-                class: classes[message.source as keyof typeof classes],
+                class: classes[message.source].cssClass,
                 attributes: { title: message.reason },
               }).range(begin, end),
             ],
           });
       }
 
-      const summaryArray = Object.entries(summary).map(([key, value]) => ({
-        selector: key,
-        count: value,
-      }));
+      const summaryArray: Summary[] = Object.entries(summary).map(
+        ([key, value]) => ({
+          selector: key as keyof ObsidianReadabilitySettings,
+          count: value.count,
+          label: value.label,
+          settingsKey: value.settingsKey,
+        })
+      );
       updateSummary(summaryArray);
       return highlights;
     },
