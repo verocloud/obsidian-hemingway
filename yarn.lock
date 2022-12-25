@@ -293,6 +293,11 @@
     "@typescript-eslint/types" "5.29.0"
     eslint-visitor-keys "^3.3.0"
 
+afinn-165@^2.0.0:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/afinn-165/-/afinn-165-2.0.2.tgz#17680027df87d49feca823474547c65ae9078c86"
+  integrity sha512-mJ/RLUfpXfQA6bzugv+bBsc/QYkVrKaLYeS8fWBpKbTCsonv4iuV9ET0fgReEunm9vKLkaNgnekuSNlTC3WQ1Q==
+
 array-differ@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/array-differ/-/array-differ-1.0.0.tgz#eff52e3758249d33be402b8bb8e564bb2b5d4031"
@@ -484,6 +489,11 @@ electron@*:
     "@electron/get" "^2.0.0"
     "@types/node" "^16.11.26"
     extract-zip "^2.0.1"
+
+emoji-emotion@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/emoji-emotion/-/emoji-emotion-3.0.1.tgz#1c9a8a8807267aa7ba717497c93da0f753bd6e97"
+  integrity sha512-e367RezWxSbv+t5TOOEJBxfnVtsfsyP7wdWw8pOSloK6C/c0LAdJdDn5Rk6YrdkKU3tY+TX9KNI1cpJaqE08eQ==
 
 end-of-stream@^1.1.0:
   version "1.4.4"
@@ -1379,6 +1389,14 @@ pluralize@^8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-8.0.0.tgz#1a6fa16a38d12a1901e0320fa017051c539ce3b1"
   integrity sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==
+
+polarity@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/polarity/-/polarity-4.0.1.tgz#5d2a6643512fdab19a585f9aabcd675640545f13"
+  integrity sha512-7O0tZ8Qryhw5th24UyCtfO2QZh6ZiewoA5wy+NAFC4WWKKkJMy2hXLNEv4965hJKexMImjrcAduGlc36hY16rQ==
+  dependencies:
+    afinn-165 "^2.0.0"
+    emoji-emotion "^3.0.0"
 
 progress@^2.0.3:
   version "2.0.3"

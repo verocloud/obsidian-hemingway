@@ -1,0 +1,1 @@
+export { getSentiment } from "./sentiment";
