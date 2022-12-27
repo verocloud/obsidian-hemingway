@@ -1,9 +1,9 @@
 {
-	"id": "obsidian-retexter",
-	"name": "Retexter plugin",
+	"id": "obsidian-hemingway",
+	"name": "Obsidian Hemingway",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "This is a sample plugin for Obsidian. This plugin demonstrates some of the capabilities of the Obsidian API.",
+	"description": "This is a plugin to fix your typos and language mistakes",
 	"author": "Breno Carvalho",
 	"authorUrl": "https://github.com/MasterTuto",
 	"isDesktopOnly": false
