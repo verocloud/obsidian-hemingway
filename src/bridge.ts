@@ -1,29 +1,39 @@
-import { Observable, Subject } from "rxjs";
+import { Subject } from "rxjs";
 import { PLUGINS } from "./retext-plugins";
+import { ObsidianReadabilitySettings } from "./settings";
 
 export type Summary = {
-  selector: string;
-  label?: string;
+  selector: keyof ObsidianReadabilitySettings;
+  settingsKey: keyof ObsidianReadabilitySettings;
+  label: string;
   count: number;
 };
 
-export const classes: Summary[] = PLUGINS.map((plugin) => ({
-  selector: plugin.settingsKey,
-  label: plugin.label,
-  count: 0,
-}));
+const classes: Summary[] = PLUGINS.map(({ name, label, settingsKey }) => {
+  const cssClass = `cm-rtx-${name.toLocaleLowerCase().replace(" ", "-")}`;
 
-export const updaterObservable = new Subject<Summary[]>();
+  return {
+    selector: cssClass as keyof ObsidianReadabilitySettings,
+    count: 0,
+    label,
+    settingsKey,
+  };
+});
+
+export const updaterObservable = new Subject<Summary[] | undefined>();
 
 export const updateSummary = (summary: Summary[]) => {
-  for (let summaryItem of summary) {
-    const classItem = classes.find(
-      (item) => item.selector === summaryItem.selector
+  const fullSummary = classes.map((item) => {
+    const summaryItem = summary.find(
+      (summaryItem) => summaryItem.selector === item.selector
     );
-    if (classItem) {
-      classItem.count = summaryItem.count;
-    }
-  }
 
-  updaterObservable.next(classes);
+    if (summaryItem) {
+      return summaryItem;
+    } else {
+      return item;
+    }
+  });
+
+  updaterObservable.next(fullSummary);
 };
