@@ -1,4 +1,5 @@
 import { App, PluginSettingTab, Setting, SettingTab } from "obsidian";
+import { updaterObservable } from "./bridge";
 import RetexterPlugin from "./main";
 import { PLUGINS } from "./retext-plugins";
 
@@ -33,6 +34,11 @@ export class SettingsTab extends PluginSettingTab {
   }
 
   display() {
+    const save = async () => {
+      await this.plugin.saveSettings();
+      updaterObservable.next(undefined);
+    };
+
     const { containerEl } = this;
 
     containerEl.empty();
@@ -50,7 +56,7 @@ export class SettingsTab extends PluginSettingTab {
             .setValue(this.plugin.settings[colorSetting.settingsKey].background)
             .onChange(async (value) => {
               this.plugin.settings[colorSetting.settingsKey].background = value;
-              await this.plugin.saveSettings();
+              await save();
             });
         })
         .addColorPicker((colorPicker) => {
@@ -58,7 +64,7 @@ export class SettingsTab extends PluginSettingTab {
             .setValue(this.plugin.settings[colorSetting.settingsKey].foreground)
             .onChange(async (value) => {
               this.plugin.settings[colorSetting.settingsKey].foreground = value;
-              await this.plugin.saveSettings();
+              await save();
             });
         });
 
@@ -70,7 +76,7 @@ export class SettingsTab extends PluginSettingTab {
             .setValue(this.plugin.settings[colorSetting.settingsKey].enabled)
             .onChange(async (value) => {
               this.plugin.settings[colorSetting.settingsKey].enabled = value;
-              await this.plugin.saveSettings();
+              await save();
             });
         });
     }
