@@ -59,9 +59,10 @@ export class CounterView extends ItemView {
       }\n`;
     }
 
-    const sentimentContent = `${getSentiment(
-      newContent
-    )} (${this.sentimentToEmoji(getSentiment(newContent))})`;
+    const analyzedSentiment = getSentiment(newContent);
+    const sentimentContent = `${analyzedSentiment} (${this.sentimentToEmoji(
+      analyzedSentiment
+    )})`;
 
     const sentimentParagraph = wrapper.createDiv("sentiment");
     sentimentParagraph.createEl("span", {
