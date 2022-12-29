@@ -44,7 +44,7 @@ export class CounterView extends ItemView {
     const wrapper = container.createDiv("wrapper");
 
     for (const { count, label, selector, settingsKey } of summary) {
-      if (count === 0) continue;
+      if (count === 0 || settingsKey === "highlightText") continue;
 
       const div = wrapper.createDiv(selector);
       const span = div.createSpan();
