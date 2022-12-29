@@ -111,7 +111,7 @@ export const PLUGINS = [
     settingsKey: "assuming",
     plugin: assuming,
     settings: false,
-    defaultBackgroundUsageColor: "#F5B0CB55",
+    defaultBackgroundColor: "#F5B0CB55",
     defaultForegroundColor: "#000000",
     label: "Possibly wrong assumptions",
   },

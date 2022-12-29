@@ -21,8 +21,6 @@ export default class RetexterPlugin extends Plugin {
 
     await this.loadSettings();
 
-    const view = this.app.workspace.getActiveViewOfType(MarkdownView);
-
     this.registerEditorExtension(errorHighlightPlugin(this.settings));
 
     this.registerView(
