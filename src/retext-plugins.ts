@@ -6,6 +6,10 @@ import profanities from "retext-profanities";
 import passive from "retext-passive";
 import intensify from "retext-intensify";
 import readability from "retext-readability";
+import overuse from "retext-overuse";
+import simplify from "retext-simplify";
+import assuming from "retext-assuming";
+import usage from "retext-usage";
 
 export const PLUGINS = [
   {
@@ -83,5 +87,41 @@ export const PLUGINS = [
     defaultBackgroundColor: "#8bad36",
     defaultForegroundColor: "#002b36",
     label: "Equality",
+  },
+  {
+    name: "Overuse",
+    settingsKey: "overuse",
+    plugin: overuse,
+    settings: false,
+    defaultBackgroundColor: "#F5B0CB55",
+    defaultForegroundColor: "#000000",
+    label: "Overuse",
+  },
+  {
+    name: "Simplify",
+    settingsKey: "simplify",
+    plugin: simplify,
+    settings: false,
+    defaultBackgroundColor: "#F5B0CB55",
+    defaultForegroundColor: "#000000",
+    label: "Hard to read words",
+  },
+  {
+    name: "Assuming",
+    settingsKey: "assuming",
+    plugin: assuming,
+    settings: false,
+    defaultBackgroundColor: "#F5B0CB55",
+    defaultForegroundColor: "#000000",
+    label: "Possibly wrong assumptions",
+  },
+  {
+    name: "Usage",
+    settingsKey: "usage",
+    plugin: usage,
+    settings: false,
+    defaultBackgroundColor: "#F5B0CB55",
+    defaultForegroundColor: "#000000",
+    label: "Word that can be improved",
   },
 ] as const;

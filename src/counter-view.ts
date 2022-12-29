@@ -1,13 +1,14 @@
 import { ItemView, WorkspaceLeaf } from "obsidian";
 
-import { Summary, updaterObservable } from "./bridge";
+import { Updater, updaterObservable } from "./bridge";
 import { ObsidianReadabilitySettings } from "./settings";
+import { getSentiment } from "./sentiment";
 
 export const COUNTER_VIEW_TYPE = "counter";
 
 export class CounterView extends ItemView {
   settings: ObsidianReadabilitySettings;
-  previousSummary: Summary[] = [];
+  previousUpdater: Updater;
 
   constructor(leaf: WorkspaceLeaf, settings: ObsidianReadabilitySettings) {
     super(leaf);
@@ -23,15 +24,16 @@ export class CounterView extends ItemView {
   }
 
   async onOpen() {
-    updaterObservable.subscribe((summary) => this.update(summary));
+    updaterObservable.subscribe((updateContent) => this.update(updateContent));
   }
 
-  update(summary?: Summary[]) {
+  update(updater?: Updater) {
     if (!this.containerEl) return;
 
-    if (!summary) summary = this.previousSummary;
+    if (!updater) updater = this.previousUpdater;
+    this.previousUpdater = updater;
 
-    this.previousSummary = summary;
+    const { newContent, summary } = updater;
 
     const container = this.containerEl.children[1];
     container.empty();
@@ -42,7 +44,7 @@ export class CounterView extends ItemView {
     const wrapper = container.createDiv("wrapper");
 
     for (const { count, label, selector, settingsKey } of summary) {
-      if (count === 0) continue;
+      if (count === 0 || settingsKey === "highlightText") continue;
 
       const div = wrapper.createDiv(selector);
       const span = div.createSpan();
@@ -57,9 +59,42 @@ export class CounterView extends ItemView {
       }\n`;
     }
 
+    const analyzedSentiment = getSentiment(newContent);
+    const sentimentContent = `${analyzedSentiment} (${this.sentimentToEmoji(
+      analyzedSentiment
+    )})`;
+
+    const sentimentParagraph = wrapper.createDiv("sentiment");
+    sentimentParagraph.createEl("span", {
+      text: "Sentiment level: ",
+      cls: "cm-rtx-sentiment-lvl-lbl",
+    });
+    sentimentParagraph.createEl("span", {
+      text: sentimentContent,
+      cls: "cm-rtx-sentiment-lvl",
+    });
+
     container.createEl("style", {
       text: css,
     });
+  }
+
+  sentimentToEmoji(sentiment: number) {
+    if (sentiment < -5) {
+      return "😡";
+    } else if (sentiment < -2) {
+      return "😠";
+    } else if (sentiment < 0) {
+      return "😕";
+    } else if (sentiment == 0) {
+      return "😐";
+    } else if (sentiment < 2) {
+      return "🙂";
+    } else if (sentiment < 5) {
+      return "😀";
+    } else {
+      return "😍";
+    }
   }
 
   async onClose() {

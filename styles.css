@@ -1,3 +1,4 @@
-/* 
-This file stands for the styles used by the plugin
-*/
+.cm-rtx-sentiment-lvl-lbl {
+    font-weight: bold;
+    margin-right: 5px;
+}
