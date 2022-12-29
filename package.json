@@ -29,6 +29,7 @@
 		"@codemirror/language": "^6.3.1",
 		"deasync": "^0.1.28",
 		"dictionary-en": "^3.2.0",
+		"gray-matter": "^4.0.3",
 		"polarity": "^4.0.1",
 		"remark-parse": "^10.0.1",
 		"retext": "^8.1.0",

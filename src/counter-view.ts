@@ -44,7 +44,7 @@ export class CounterView extends ItemView {
     const wrapper = container.createDiv("wrapper");
 
     for (const { count, label, selector, settingsKey } of summary) {
-      if (count === 0) continue;
+      if (count === 0 || settingsKey === "highlightText") continue;
 
       const div = wrapper.createDiv(selector);
       const span = div.createSpan();
@@ -59,9 +59,10 @@ export class CounterView extends ItemView {
       }\n`;
     }
 
-    const sentimentContent = `${getSentiment(
-      newContent
-    )} (${this.sentimentToEmoji(getSentiment(newContent))})`;
+    const analyzedSentiment = getSentiment(newContent);
+    const sentimentContent = `${analyzedSentiment} (${this.sentimentToEmoji(
+      analyzedSentiment
+    )})`;
 
     const sentimentParagraph = wrapper.createDiv("sentiment");
     sentimentParagraph.createEl("span", {

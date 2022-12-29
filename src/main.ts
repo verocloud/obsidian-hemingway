@@ -1,5 +1,5 @@
 import { EditorView } from "@codemirror/view";
-import { MarkdownView, Plugin } from "obsidian";
+import { Plugin } from "obsidian";
 import { errorHighlightPlugin } from "./statefield-plugin";
 import { CounterView, COUNTER_VIEW_TYPE } from "./counter-view";
 import {
@@ -20,8 +20,6 @@ export default class RetexterPlugin extends Plugin {
     };
 
     await this.loadSettings();
-
-    const view = this.app.workspace.getActiveViewOfType(MarkdownView);
 
     this.registerEditorExtension(errorHighlightPlugin(this.settings));
 
