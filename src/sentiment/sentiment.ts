@@ -1,4 +1,5 @@
 import { polarity } from "polarity";
+import { getFrontmatterRange } from "src/utils";
 
 const getWords = (content: string) => {
   const words = content
@@ -9,6 +10,8 @@ const getWords = (content: string) => {
 };
 
 export const getSentiment = (content: string) => {
+  const [_, end] = getFrontmatterRange(content);
+  content = content.slice(end + 1);
   const words = getWords(content);
 
   const { polarity: sentiment } = polarity(words);
