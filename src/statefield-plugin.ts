@@ -101,10 +101,13 @@ export const errorHighlightPlugin = (settings: ObsidianReadabilitySettings) =>
           summary[className].count += 1;
         }
 
+        if (!settings.highlightText) continue;
+
         const begin = message.position?.start.offset || 0;
         const end = message.position?.end.offset || 0;
 
         let skip = false;
+        console.log("Should skip?", skip);
         highlights.between(begin, end, (from, to, value) => {
           skip = (value as any).class === className;
           return false;

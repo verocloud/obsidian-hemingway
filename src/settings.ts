@@ -12,18 +12,25 @@ type DefaultSetting = {
 type Keys = typeof PLUGINS[number]["settingsKey"];
 export type ObsidianReadabilitySettings = {
   [key in Keys]: DefaultSetting;
+} & {
+  highlightText: boolean;
 };
 
 export const DEFAULT_SETTINGS = PLUGINS.reduce<
   Partial<ObsidianReadabilitySettings>
->((acc, plugin) => {
-  acc[plugin.settingsKey] = {
-    enabled: true,
-    background: plugin.defaultBackgroundColor,
-    foreground: plugin.defaultForegroundColor,
-  };
-  return acc;
-}, {});
+>(
+  (acc, plugin) => {
+    acc[plugin.settingsKey] = {
+      enabled: true,
+      background: plugin.defaultBackgroundColor,
+      foreground: plugin.defaultForegroundColor,
+    };
+    return acc;
+  },
+  {
+    highlightText: true,
+  }
+);
 
 export class SettingsTab extends PluginSettingTab {
   app: App;
@@ -42,6 +49,18 @@ export class SettingsTab extends PluginSettingTab {
     const { containerEl } = this;
 
     containerEl.empty();
+
+    new Setting(containerEl)
+      .setName("Enable highlighting text")
+      .setDesc("Enable or disable highlighting when editing a note")
+      .addToggle((toggle) => {
+        toggle
+          .setValue(this.plugin.settings.highlightText)
+          .onChange(async (value) => {
+            this.plugin.settings.highlightText = value;
+            await save();
+          });
+      });
 
     for (let colorSetting of PLUGINS) {
       const lowerCaseName = colorSetting.name.toLocaleLowerCase();
