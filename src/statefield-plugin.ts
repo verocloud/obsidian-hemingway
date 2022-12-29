@@ -7,18 +7,7 @@ import stringify from "retext-stringify";
 import { Summary, updateSummary } from "./bridge";
 import { ObsidianReadabilitySettings } from "./settings";
 import { PLUGINS } from "./retext-plugins";
-
-/*
-type Plugins = typeof PLUGINS[number];
-type Keys = Plugins["messageSource"];
-type ExtractCssClass<T extends Keys> = T extends Plugins["messageSource"]
-  ? typeof PLUGINS[number]["cssClass"]
-  : never;
-
-type LegacyClasses = {
-  [key in Keys]: ExtractCssClass<key>;
-};
-*/
+import matter from "gray-matter";
 
 type Classes = Record<
   string,
@@ -69,20 +58,45 @@ const initializeProcessor = (settings: ObsidianReadabilitySettings) => {
   return processor.use(stringify);
 };
 
+const getFrontmatterRange = (text: string) => {
+  text = text.trim();
+  const begin = text.indexOf("---");
+  let end = text.indexOf("---", begin + 3);
+
+  while (end !== -1 && text[end - 1] !== "\n" && text[end + 4] !== "\n") {
+    end = text.indexOf("---", end + 3);
+  }
+
+  if (end === -1 && begin === 0) return [begin, text.length];
+  else if (begin !== 0 || end === -1) return [0, 0];
+
+  return [begin, end];
+};
+
 export const errorHighlightPlugin = (settings: ObsidianReadabilitySettings) =>
   StateField.define<DecorationSet>({
     create: (_) => Decoration.none,
     update: function (highlights, tr) {
       highlights = Decoration.none;
-
       const fullText = tr.newDoc.sliceString(0);
+      const [beginFm, endFm] = getFrontmatterRange(fullText);
+
+      const frontmatter = matter(fullText).data as {
+        highlightText: boolean;
+      };
       const processor = initializeProcessor(settings);
 
       const vfile = processor.processSync(fullText);
       const summary: KeyToNumber = {};
 
       for (let message of vfile.messages) {
-        if (!message.source) continue;
+        const begin = message.position?.start.offset || 0;
+        const end = message.position?.end.offset || 0;
+        const isInsideFrontMatter = begin >= beginFm && end <= endFm;
+
+        console.log(beginFm, endFm, begin, end, isInsideFrontMatter);
+
+        if (!message.source || isInsideFrontMatter) continue;
         const source = message.source;
         if (!classes[source]) {
           console.warn(`Unknown source: ${source}`);
@@ -101,13 +115,13 @@ export const errorHighlightPlugin = (settings: ObsidianReadabilitySettings) =>
           summary[className].count += 1;
         }
 
-        if (!settings.highlightText) continue;
-
-        const begin = message.position?.start.offset || 0;
-        const end = message.position?.end.offset || 0;
-
+        const shouldNotHighlight =
+          !settings.highlightText ||
+          (frontmatter?.highlightText !== undefined &&
+            !frontmatter.highlightText);
+        if (shouldNotHighlight) continue;
         let skip = false;
-        console.log("Should skip?", skip);
+
         highlights.between(begin, end, (from, to, value) => {
           skip = (value as any).class === className;
           return false;
@@ -132,7 +146,7 @@ export const errorHighlightPlugin = (settings: ObsidianReadabilitySettings) =>
           settingsKey: value.settingsKey,
         })
       );
-      updateSummary(summaryArray, tr.newDoc.sliceString(0));
+      updateSummary(summaryArray, fullText);
       return highlights;
     },
     provide: (f) => EditorView.decorations.from(f),
