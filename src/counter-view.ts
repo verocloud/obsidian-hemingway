@@ -1,6 +1,6 @@
 import { ItemView, WorkspaceLeaf } from "obsidian";
 
-import { Summary, Updater, updaterObservable } from "./bridge";
+import { Updater, updaterObservable } from "./bridge";
 import { ObsidianReadabilitySettings } from "./settings";
 import { getSentiment } from "./sentiment";
 

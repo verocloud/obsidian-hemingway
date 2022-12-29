@@ -64,6 +64,7 @@ export const errorHighlightPlugin = (settings: ObsidianReadabilitySettings) =>
     create: (_) => Decoration.none,
     update: function (highlights, tr) {
       highlights = Decoration.none;
+
       const fullText = tr.newDoc.sliceString(0);
       const [beginFm, endFm] = getFrontmatterRange(fullText);
 
