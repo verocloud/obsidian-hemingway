@@ -20,10 +20,9 @@ const classes: Summary[] = PLUGINS.map(({ name, label, settingsKey }) => {
   };
 });
 
-export type Updater = { summary: Summary[]; newContent: string };
-export const updaterObservable = new Subject<Updater | undefined>();
+export const updaterObservable = new Subject<Summary[] | undefined>();
 
-export const updateSummary = (summary: Summary[], newContent: string) => {
+export const updateSummary = (summary: Summary[]) => {
   const fullSummary = classes.map((item) => {
     const summaryItem = summary.find(
       (summaryItem) => summaryItem.selector === item.selector
@@ -36,5 +35,5 @@ export const updateSummary = (summary: Summary[], newContent: string) => {
     }
   });
 
-  updaterObservable.next({ summary: fullSummary, newContent });
+  updaterObservable.next(fullSummary);
 };

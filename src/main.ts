@@ -1,5 +1,5 @@
 import { EditorView } from "@codemirror/view";
-import { Plugin } from "obsidian";
+import { MarkdownView, Plugin } from "obsidian";
 import { errorHighlightPlugin } from "./statefield-plugin";
 import { CounterView, COUNTER_VIEW_TYPE } from "./counter-view";
 import {
@@ -7,19 +7,15 @@ import {
   DEFAULT_SETTINGS,
   SettingsTab,
 } from "./settings";
-import { VFile } from "vfile";
 
 export default class RetexterPlugin extends Plugin {
   settings: ObsidianReadabilitySettings;
   editorView: EditorView;
 
   async onload() {
-    (VFile.prototype as any).warn = VFile.prototype.message;
-    (String.prototype as any).join = function (separator: string) {
-      return this;
-    };
-
     await this.loadSettings();
+
+    const view = this.app.workspace.getActiveViewOfType(MarkdownView);
 
     this.registerEditorExtension(errorHighlightPlugin(this.settings));
 

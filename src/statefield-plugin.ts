@@ -7,8 +7,18 @@ import stringify from "retext-stringify";
 import { Summary, updateSummary } from "./bridge";
 import { ObsidianReadabilitySettings } from "./settings";
 import { PLUGINS } from "./retext-plugins";
-import matter from "gray-matter";
-import { getFrontmatterRange } from "./utils";
+
+/*
+type Plugins = typeof PLUGINS[number];
+type Keys = Plugins["messageSource"];
+type ExtractCssClass<T extends Keys> = T extends Plugins["messageSource"]
+  ? typeof PLUGINS[number]["cssClass"]
+  : never;
+
+type LegacyClasses = {
+  [key in Keys]: ExtractCssClass<key>;
+};
+*/
 
 type Classes = Record<
   string,
@@ -66,22 +76,13 @@ export const errorHighlightPlugin = (settings: ObsidianReadabilitySettings) =>
       highlights = Decoration.none;
 
       const fullText = tr.newDoc.sliceString(0);
-      const [beginFm, endFm] = getFrontmatterRange(fullText);
-
-      const frontmatter = matter(fullText).data as {
-        highlightText: boolean;
-      };
       const processor = initializeProcessor(settings);
 
       const vfile = processor.processSync(fullText);
       const summary: KeyToNumber = {};
 
       for (let message of vfile.messages) {
-        const begin = message.position?.start.offset || 0;
-        const end = message.position?.end.offset || 0;
-        const isInsideFrontMatter = begin >= beginFm && end <= endFm;
-
-        if (!message.source || isInsideFrontMatter) continue;
+        if (!message.source) continue;
         const source = message.source;
         if (!classes[source]) {
           console.warn(`Unknown source: ${source}`);
@@ -100,13 +101,10 @@ export const errorHighlightPlugin = (settings: ObsidianReadabilitySettings) =>
           summary[className].count += 1;
         }
 
-        const shouldNotHighlight =
-          !settings.highlightText ||
-          (frontmatter?.highlightText !== undefined &&
-            !frontmatter.highlightText);
-        if (shouldNotHighlight) continue;
-        let skip = false;
+        const begin = message.position?.start.offset || 0;
+        const end = message.position?.end.offset || 0;
 
+        let skip = false;
         highlights.between(begin, end, (from, to, value) => {
           skip = (value as any).class === className;
           return false;
@@ -131,7 +129,7 @@ export const errorHighlightPlugin = (settings: ObsidianReadabilitySettings) =>
           settingsKey: value.settingsKey,
         })
       );
-      updateSummary(summaryArray, fullText);
+      updateSummary(summaryArray);
       return highlights;
     },
     provide: (f) => EditorView.decorations.from(f),
