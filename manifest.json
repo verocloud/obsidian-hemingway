@@ -1,7 +1,7 @@
 {
 	"id": "obsidian-hemingway",
 	"name": "Obsidian Hemingway",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"minAppVersion": "0.15.0",
 	"description": "This is a plugin to fix your typos and language mistakes",
 	"author": "Breno Carvalho",
