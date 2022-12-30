@@ -1712,7 +1712,7 @@ sumchecker@^3.0.1:
   dependencies:
     debug "^4.1.0"
 
-syllable@^5.0.0:
+syllable@^5.0.0, syllable@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/syllable/-/syllable-5.0.1.tgz#ae283ef2b488e6047bfb9da7874a72f4df0eb881"
   integrity sha512-HWtNCp6v7J8H0lrT8j1HHjfOLltRoDcC7QRFVu25p4BE52JqetXG65nqC7CsatT8WQRfY4Qvh93BWJIUxbmXFg==

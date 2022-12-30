@@ -46,6 +46,7 @@
 		"retext-syntax-mentions": "^3.1.0",
 		"retext-syntax-urls": "^3.1.2",
 		"rxjs": "^7.5.7",
+		"syllable": "^5.0.1",
 		"unified": "^10.1.2"
 	}
 }

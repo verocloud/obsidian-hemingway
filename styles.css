@@ -1,0 +1,17 @@
+.cm-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.cm-rtx-summary__table {
+    border: 3px solid rgba(0, 0, 0, 0.5);
+    border-collapse: collapse;
+}
+
+.cm-rtx-summary__table td,
+.cm-rtx-summary__table th {
+    padding: 0.5rem;
+    border: 2px solid rgba(0, 0, 0, 0.4);
+    border-collapse: collapse;
+}
