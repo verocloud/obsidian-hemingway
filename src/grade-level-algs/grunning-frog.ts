@@ -1,4 +1,4 @@
-import { syllable } from "syllable";
+import { ReadabilityData } from "./summary";
 
 const gunningLevelToGrade = (gunningFogIndex: number) => {
   if (gunningFogIndex >= 17) return "College graduate";
@@ -16,20 +16,15 @@ const gunningLevelToGrade = (gunningFogIndex: number) => {
   return "Fifth grade or lower";
 };
 
-export const calculateGunningFogIndex = (text: string) => {
-  const words = text
-    .split(" ")
-    .filter((word) => word.length > 0)
-    .map((word) => word.replace(/[^a-zA-Z\-]/g, ""));
-
-  const sentences = text.split(/[.?!]/).map((sentence) => sentence.trim());
-
-  const averageSentenceLength = words.length / sentences.length;
-
-  const complexWords = words.filter((word) => syllable(word) >= 3);
+export const calculateGunningFogIndex = ({
+  complexWords,
+  sentences,
+  words,
+}: ReadabilityData) => {
+  const averageSentenceLength = words / sentences;
 
   const indexResult =
-    (averageSentenceLength + 100 * (complexWords.length / words.length)) * 0.4;
+    (averageSentenceLength + 100 * (complexWords / words)) * 0.4;
 
   return {
     label: gunningLevelToGrade(indexResult),
